@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mpf"
+version = "0.1.1"
+description = "Memory Portability Format — open envelope for moving agent memory between systems"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Jason Perlow", email = "jperlow@gmail.com" },
+]
+keywords = [
+    "memory", "rag", "agent", "interop", "portability",
+    "mnemos", "mem0", "letta", "graphiti", "cognee",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = []
+
+[project.optional-dependencies]
+validate = ["jsonschema>=4.20.0"]
+dev = ["jsonschema>=4.20.0", "ruff>=0.5.0", "pytest>=8.0"]
+
+[project.scripts]
+mpf-validate = "validate:main"
+
+[project.urls]
+Spec = "https://github.com/mnemos-os/mpf/blob/master/MPF.md"
+Schema = "https://github.com/mnemos-os/mpf/blob/master/schema/mpf-v0.1.json"
+Issues = "https://github.com/mnemos-os/mpf/issues"
+Discussions = "https://github.com/perlowja/mnemos/discussions"
+"Reference Implementation" = "https://github.com/perlowja/mnemos"
+
+[tool.setuptools]
+py-modules = ["validate"]
+
+[tool.setuptools.package-data]
+"*" = ["schema/*.json", "vectors/*.json", "MPF.md"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B"]
+ignore = ["E501"]

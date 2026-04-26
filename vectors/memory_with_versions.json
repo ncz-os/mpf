@@ -1,0 +1,62 @@
+{
+  "mpf_version": "0.1.1",
+  "source_system": "example",
+  "source_version": "1.0.0",
+  "exported_at": "2026-01-15T12:00:00+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "id": "mem_versioned_001",
+      "kind": "memory",
+      "payload_version": "mnemos-3.1",
+      "payload": {
+        "content": "Postgres pgvector IVFFlat indexes need lists ~= sqrt(rows) for balanced recall vs build time. Re-INDEX after large bulk loads to rebuild centroids.",
+        "category": "infrastructure",
+        "subcategory": "postgres",
+        "created": "2026-01-10T09:00:00+00:00",
+        "updated": "2026-01-15T11:30:00+00:00",
+        "owner_id": "alice",
+        "namespace": "alice-ns",
+        "permission_mode": 600,
+        "quality_rating": 88,
+        "metadata": {}
+      }
+    }
+  ],
+  "memory_versions": [
+    {
+      "id": "ver_001",
+      "record_id": "mem_versioned_001",
+      "version_num": 1,
+      "branch": "main",
+      "commit_hash": "0000000000000000000000000000000000000000000000000000000000000001",
+      "parent_version_id": null,
+      "merge_parents": null,
+      "content": "Postgres pgvector IVFFlat indexes need lists ~= sqrt(rows).",
+      "category": "infrastructure",
+      "subcategory": "postgres",
+      "owner_id": "alice",
+      "namespace": "alice-ns",
+      "snapshot_at": "2026-01-10T09:00:00+00:00",
+      "snapshot_by": "alice",
+      "change_type": "create"
+    },
+    {
+      "id": "ver_002",
+      "record_id": "mem_versioned_001",
+      "version_num": 2,
+      "branch": "main",
+      "commit_hash": "0000000000000000000000000000000000000000000000000000000000000002",
+      "parent_version_id": "ver_001",
+      "merge_parents": null,
+      "content": "Postgres pgvector IVFFlat indexes need lists ~= sqrt(rows) for balanced recall vs build time. Re-INDEX after large bulk loads to rebuild centroids.",
+      "category": "infrastructure",
+      "subcategory": "postgres",
+      "owner_id": "alice",
+      "namespace": "alice-ns",
+      "snapshot_at": "2026-01-15T11:30:00+00:00",
+      "snapshot_by": "alice",
+      "change_type": "update"
+    }
+  ]
+}
