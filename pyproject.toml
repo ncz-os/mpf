@@ -8,7 +8,7 @@ version = "0.1.1"
 description = "Memory Portability Format — open envelope for moving agent memory between systems"
 readme = "README.md"
 requires-python = ">=3.10"
-license = { text = "Apache-2.0" }
+license = { text = "MIT" }
 authors = [
     { name = "Jason Perlow", email = "jperlow@gmail.com" },
 ]
@@ -19,7 +19,7 @@ keywords = [
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",

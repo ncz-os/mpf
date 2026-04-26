@@ -1,7 +1,7 @@
 # MPF — Memory Portability Format
 
 [![spec: v0.1.1](https://img.shields.io/badge/spec-v0.1.1-blue.svg)](MPF.md)
-[![license: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **A schema-versioned JSON envelope for moving agent memory and parsed
 documents between systems.**
@@ -70,8 +70,14 @@ repo for spec ambiguities, schema bugs, or vector-validation regressions.
 
 ## License
 
-[Apache 2.0](LICENSE).
+[MIT](LICENSE).
 
 The spec text, JSON Schema, validator, and test vectors are all under
-the same Apache 2 license. Implementations targeting MPF can use any
-compatible license.
+the same MIT license — chosen to maximize adoption across memory
+systems regardless of their own license. Implementations targeting
+MPF can use any license.
+
+(Note: the reference implementation, [MNEMOS](https://github.com/mnemos-os/mnemos),
+is Apache 2.0. MIT for the spec, Apache 2.0 for the impl is intentional —
+the spec stays maximally adoptable, the impl carries patent grants for
+its enterprise users.)
