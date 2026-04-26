@@ -1,0 +1,45 @@
+{
+  "mpf_version": "0.1.1",
+  "source_system": "example",
+  "source_version": "1.0.0",
+  "exported_at": "2026-01-15T10:30:00+00:00",
+  "record_count": 2,
+  "records": [
+    {
+      "id": "mem_001",
+      "kind": "memory",
+      "payload_version": "mnemos-3.1",
+      "payload": {
+        "content": "Cassandra is a distributed wide-column store. Nodes form a token ring; each row's hash determines which nodes hold replicas.",
+        "category": "infrastructure",
+        "subcategory": "databases",
+        "created": "2026-01-15T10:00:00+00:00",
+        "updated": "2026-01-15T10:00:00+00:00",
+        "owner_id": "alice",
+        "namespace": "alice-ns",
+        "permission_mode": 600,
+        "quality_rating": 85,
+        "metadata": {
+          "source_url": "https://example.com/cassandra-intro"
+        }
+      }
+    },
+    {
+      "id": "mem_002",
+      "kind": "memory",
+      "payload_version": "mnemos-3.1",
+      "payload": {
+        "content": "Anonymous functions in Python via lambda only support a single expression, not statements. Use def for multi-line bodies.",
+        "category": "facts",
+        "subcategory": "python",
+        "created": "2026-01-15T10:15:00+00:00",
+        "updated": "2026-01-15T10:30:00+00:00",
+        "owner_id": "alice",
+        "namespace": "alice-ns",
+        "permission_mode": 600,
+        "quality_rating": 80,
+        "metadata": {}
+      }
+    }
+  ]
+}

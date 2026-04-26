@@ -1,0 +1,54 @@
+{
+  "mpf_version": "0.1.1",
+  "source_system": "example",
+  "source_version": "1.0.0",
+  "exported_at": "2026-01-15T11:00:00+00:00",
+  "record_count": 1,
+  "records": [
+    {
+      "id": "mem_alice_001",
+      "kind": "memory",
+      "payload_version": "mnemos-3.1",
+      "payload": {
+        "content": "Yocto layers stack via BBLAYERS. Layer priority breaks recipe-name conflicts; meta-tegra wins over poky for kernel recipes when its priority is higher.",
+        "category": "infrastructure",
+        "subcategory": "yocto",
+        "created": "2026-01-15T10:45:00+00:00",
+        "updated": "2026-01-15T10:45:00+00:00",
+        "owner_id": "alice",
+        "namespace": "alice-ns",
+        "permission_mode": 600,
+        "quality_rating": 90,
+        "metadata": {}
+      }
+    }
+  ],
+  "kg_triples": [
+    {
+      "id": "kg_001",
+      "subject_literal": "Yocto",
+      "predicate": "uses",
+      "object_literal": "BBLAYERS",
+      "subject_type": "concept",
+      "object_type": "concept",
+      "confidence": 0.95,
+      "memory_id": "mem_alice_001",
+      "owner_id": "alice",
+      "namespace": "alice-ns",
+      "created": "2026-01-15T10:45:00+00:00"
+    },
+    {
+      "id": "kg_002",
+      "subject_literal": "meta-tegra",
+      "predicate": "extends",
+      "object_literal": "poky",
+      "subject_type": "yocto-layer",
+      "object_type": "yocto-layer",
+      "confidence": 0.9,
+      "memory_id": "mem_alice_001",
+      "owner_id": "alice",
+      "namespace": "alice-ns",
+      "created": "2026-01-15T10:45:00+00:00"
+    }
+  ]
+}
