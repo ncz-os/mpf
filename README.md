@@ -3,14 +3,25 @@
 [![spec: v0.1.1](https://img.shields.io/badge/spec-v0.1.1-blue.svg)](MPF.md)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**A schema-versioned JSON envelope for moving agent memory and parsed
-documents between systems.**
+**Think of it as the CSV export, but for agent memory.**
 
-MPF is the open contract that lets any RAG memory system — MNEMOS,
-Mem0, Letta, Graphiti, Cognee, MemPalace, Zep, your-system-here — talk
-to any other. It's a file-level format, not a wire protocol. Producers
-emit MPF, consumers ingest MPF. The format is intentionally
-compositional, neutral, and minimal at the v0.1 line.
+A schema-versioned JSON envelope for moving agent memory between
+systems — and for snapshotting it as a portable backup. Like CSV,
+MPF is:
+
+- **Universal.** Any memory system can produce or consume it. MNEMOS,
+  Mem0, Letta, Graphiti, Cognee, MemPalace, Zep, your-system-here.
+- **Human-readable.** Open it in any text editor. Grep it. Diff it.
+  Inspect it byte by byte if you have to.
+- **Both interop AND backup.** Same file works for migrating between
+  systems and for archiving a snapshot. Export to leave; export to
+  protect; export to share; export to fork. One format, four reasons.
+- **Honest about lossy fields.** System-specific extensions are
+  documented, not hidden. If your data won't survive a round-trip,
+  the spec tells you which fields and why.
+
+It's a file-level format, not a wire protocol. The format is
+intentionally compositional, neutral, and minimal at the v0.1 line.
 
 ## What's in this repo
 
