@@ -1,12 +1,21 @@
 # Memory Portability Format (MPF)
 
-**A schema-versioned JSON envelope for moving agent memory and parsed
-documents between systems.** MNEMOS authored the v0.1 line as the
-reference implementation; the format itself is intentionally neutral.
-Any RAG memory system (MemPalace, Mem0, Letta, Graphiti, Cognee, Zep)
-can produce or consume MPF, and document-ingest pipelines (docling,
-markitdown) can target it as an output format without changing their
-own schemas.
+**Think of it as the CSV export, but for agent memory.**
+
+A schema-versioned JSON envelope for moving agent memory and parsed
+documents between systems — and for snapshotting them as portable
+backups. MNEMOS authored the v0.1 line as the reference implementation;
+the format itself is intentionally neutral. Any RAG memory system
+(MemPalace, Mem0, Letta, Graphiti, Cognee, Zep) can produce or consume
+MPF, and document-ingest pipelines (docling, markitdown) can target it
+as an output format without changing their own schemas.
+
+**Two use cases, one format:**
+
+- **Interop** — migrate from system A to system B without a bespoke
+  shim per pair.
+- **Backup** — snapshot your memory state to a self-describing,
+  human-readable, schema-versioned file. Restore with one POST.
 
 This document is a **spec**, not a marketing pitch. Fields are
 normative, versioning is explicit, and every interop mapping has a
