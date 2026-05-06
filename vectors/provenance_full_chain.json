@@ -1,0 +1,131 @@
+{
+  "mpf_version": "0.2.0",
+  "source_system": "mnemos",
+  "source_version": "3.2.0",
+  "exported_at": "2026-05-01T14:10:00Z",
+  "record_count": 2,
+  "records": [
+    {
+      "id": "mem_prov_source_001",
+      "kind": "memory",
+      "payload_version": "mnemos-3.1",
+      "transaction_time": "2026-05-01T14:00:00Z",
+      "valid_time_start": "2026-05-01T13:55:00Z",
+      "valid_time_end": null,
+      "provenance": {
+        "wasAttributedTo": {
+          "type": "user",
+          "id": "user:alice",
+          "name": "Alice"
+        },
+        "wasGeneratedBy": {
+          "type": "chat_session",
+          "id": "session:alpha",
+          "startedAtTime": "2026-05-01T13:55:00Z",
+          "endedAtTime": "2026-05-01T14:00:00Z"
+        },
+        "wasInfluencedBy": [
+          {
+            "type": "external_uri",
+            "uri": "https://example.com/runbook/hermes",
+            "relationship": "cites"
+          }
+        ],
+        "generatedAtTime": "2026-05-01T14:00:00Z"
+      },
+      "payload": {
+        "content": "Hermes gateway health checks depend on the MNEMOS API readiness endpoint.",
+        "category": "infrastructure",
+        "subcategory": "operations",
+        "created": "2026-05-01T14:00:00Z",
+        "updated": "2026-05-01T14:00:00Z",
+        "owner_id": "alice",
+        "namespace": "team-a",
+        "permission_mode": 600,
+        "quality_rating": 90,
+        "metadata": {
+          "source_url": "https://example.com/runbook/hermes"
+        }
+      }
+    },
+    {
+      "id": "mem_prov_distilled_001",
+      "kind": "memory",
+      "payload_version": "mnemos-3.1",
+      "transaction_time": "2026-05-01T14:05:00Z",
+      "valid_time_start": "2026-05-01T13:55:00Z",
+      "valid_time_end": null,
+      "provenance": {
+        "wasAttributedTo": {
+          "type": "agent",
+          "id": "agent:distiller",
+          "name": "MNEMOS Distiller"
+        },
+        "wasGeneratedBy": {
+          "type": "distillation",
+          "id": "distill:contest-42",
+          "startedAtTime": "2026-05-01T14:04:00Z",
+          "endedAtTime": "2026-05-01T14:05:00Z"
+        },
+        "wasInfluencedBy": [
+          {
+            "type": "memory",
+            "id": "mem_prov_source_001",
+            "relationship": "derived_from"
+          },
+          {
+            "type": "external_uri",
+            "uri": "fed:peer-west/memories/mem-88",
+            "relationship": "fed:peer-west"
+          }
+        ],
+        "generatedAtTime": "2026-05-01T14:05:00Z"
+      },
+      "payload": {
+        "content": "Hermes depends on MNEMOS API readiness for health checks.",
+        "category": "infrastructure",
+        "subcategory": "operations",
+        "created": "2026-05-01T14:05:00Z",
+        "updated": "2026-05-01T14:05:00Z",
+        "owner_id": "alice",
+        "namespace": "team-a",
+        "permission_mode": 600,
+        "quality_rating": 92,
+        "metadata": {
+          "distilled_from": "mem_prov_source_001"
+        }
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from": "mem_prov_distilled_001",
+      "rel": "derived_from",
+      "to": "mem_prov_source_001",
+      "created": "2026-05-01T14:05:00Z"
+    }
+  ],
+  "compression_manifest": [
+    {
+      "record_id": "mem_prov_source_001",
+      "engine_id": "anamnesis",
+      "engine_version": "0.2.0",
+      "compressed_content": "Hermes depends on MNEMOS API readiness for health checks.",
+      "compressed_tokens": 11,
+      "compression_ratio": 0.58,
+      "quality_score": 0.94,
+      "composite_score": 0.88,
+      "scoring_profile": "balanced",
+      "judge_model": "mnemos-judge-1",
+      "distillation_lineage": ["mem_prov_source_001", "mem_prov_distilled_001"],
+      "judge_confidence": 0.94,
+      "selected_at": "2026-05-01T14:05:00Z",
+      "winner_contest_id": "distill:contest-42",
+      "owner_id": "alice",
+      "provenance": {
+        "distillation_lineage": ["mem_prov_source_001", "mem_prov_distilled_001"],
+        "judge_confidence": 0.94
+      }
+    }
+  ]
+}

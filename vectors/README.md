@@ -11,6 +11,9 @@ without loss of any fields it claims to support.
 | `memory_basic.json` | Two `kind: "memory"` records, no sidecars. The minimum-shape envelope. |
 | `memory_with_kg.json` | One memory + 2 KG triples in the `kg_triples` sidecar. Tests subject_literal/object_literal + memory_id linkage. |
 | `memory_with_versions.json` | One memory + 2 memory-version DAG entries (parent → child). Tests `memory_versions` sidecar with `parent_version_id`. |
+| `provenance_full_chain.json` | MPF v0.2 PROV chain with `wasInfluencedBy` pointing at another memory in the same envelope plus compression lineage. |
+| `memory_bitemporal.json` | MPF v0.2 memory where valid time differs from transaction time. |
+| `migration_from_mif_round_trip.json` | MPF v0.2 output from the read-only MIF adapter, preserving the source MIF object for one-way reconstruction. |
 
 ## Validation
 
@@ -19,9 +22,10 @@ pip install jsonschema
 python ../validate.py --file memory_basic.json
 python ../validate.py --file memory_with_kg.json
 python ../validate.py --file memory_with_versions.json
+python ../validate.py .
 ```
 
-All three should print a summary line ending in `OK`.
+All vectors should print a summary line ending in `OK`.
 
 ## Round-trip contract
 

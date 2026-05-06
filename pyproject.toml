@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mpf"
-version = "0.1.1"
+version = "0.2.0"
 description = "Memory Portability Format — open envelope for moving agent memory between systems"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -37,10 +37,10 @@ mpf-validate = "validate:main"
 
 [project.urls]
 Spec = "https://github.com/mnemos-os/mpf/blob/master/MPF.md"
-Schema = "https://github.com/mnemos-os/mpf/blob/master/schema/mpf-v0.1.json"
+Schema = "https://github.com/mnemos-os/mpf/blob/master/schema/mpf-v0.2.json"
 Issues = "https://github.com/mnemos-os/mpf/issues"
-Discussions = "https://github.com/perlowja/mnemos/discussions"
-"Reference Implementation" = "https://github.com/perlowja/mnemos"
+Discussions = "https://github.com/mnemos-os/mnemos/discussions"
+"Reference Implementation" = "https://github.com/mnemos-os/mnemos"
 
 [tool.setuptools]
 py-modules = ["validate"]

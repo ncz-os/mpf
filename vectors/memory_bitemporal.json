@@ -1,0 +1,51 @@
+{
+  "mpf_version": "0.2.0",
+  "source_system": "mnemos",
+  "source_version": "3.2.0",
+  "exported_at": "2026-05-01T09:40:00Z",
+  "record_count": 1,
+  "records": [
+    {
+      "id": "mem_bitemporal_001",
+      "kind": "memory",
+      "payload_version": "mnemos-3.1",
+      "valid_time_start": "2024-01-01T00:00:00Z",
+      "valid_time_end": "2024-12-31T23:59:59Z",
+      "transaction_time": "2026-05-01T09:30:00Z",
+      "provenance": {
+        "wasAttributedTo": {
+          "type": "system",
+          "id": "system:legacy-import"
+        },
+        "wasGeneratedBy": {
+          "type": "etl_job",
+          "id": "etl:legacy-policy-load",
+          "startedAtTime": "2026-05-01T09:20:00Z",
+          "endedAtTime": "2026-05-01T09:30:00Z"
+        },
+        "wasInfluencedBy": [
+          {
+            "type": "external_uri",
+            "uri": "https://example.com/policies/2024/auth-policy",
+            "relationship": "source_document"
+          }
+        ],
+        "generatedAtTime": "2026-05-01T09:30:00Z"
+      },
+      "payload": {
+        "content": "The 2024 internal API authentication policy required OAuth 2.0 bearer tokens.",
+        "category": "policy",
+        "subcategory": "auth",
+        "created": "2026-05-01T09:30:00Z",
+        "updated": "2026-05-01T09:30:00Z",
+        "owner_id": "alice",
+        "namespace": "team-a",
+        "permission_mode": 600,
+        "quality_rating": 87,
+        "metadata": {
+          "policy_year": 2024
+        }
+      }
+    }
+  ]
+}
