@@ -1,0 +1,85 @@
+{
+  "mpf_version": "0.2.0",
+  "source_system": "mif",
+  "source_version": "0.1.0-draft",
+  "source_instance": "read-only-adapter",
+  "exported_at": "2026-05-01T16:00:00Z",
+  "record_count": 1,
+  "records": [
+    {
+      "id": "mif_550e8400-e29b-41d4-a716-446655440000",
+      "kind": "memory",
+      "payload_version": "mif-0.1.0-draft",
+      "valid_time_start": "2026-01-15T00:00:00Z",
+      "valid_time_end": null,
+      "transaction_time": "2026-01-15T10:30:00Z",
+      "provenance": {
+        "wasAttributedTo": {
+          "type": "agent",
+          "id": "agent:claude-3-opus"
+        },
+        "wasGeneratedBy": {
+          "type": "activity",
+          "id": "mif:conversation:conv-456"
+        },
+        "wasInfluencedBy": [
+          {
+            "type": "external_uri",
+            "uri": "urn:mif:conversation:conv-456",
+            "relationship": "mif:prov:wasDerivedFrom"
+          }
+        ],
+        "generatedAtTime": "2026-01-15T10:30:00Z"
+      },
+      "payload": {
+        "content": "User prefers dark mode for all applications.",
+        "category": "semantic",
+        "subcategory": "preferences",
+        "created": "2026-01-15T10:30:00Z",
+        "updated": "2026-01-20T14:22:00Z",
+        "owner_id": "mif-import",
+        "namespace": "_semantic/preferences",
+        "permission_mode": 600,
+        "quality_rating": 95,
+        "metadata": {
+          "mif_read_only": true,
+          "mif_round_trip_key": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
+          "mif_raw": {
+            "@context": "https://mif-spec.dev/schema/context.jsonld",
+            "@type": "Memory",
+            "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
+            "memoryType": "semantic",
+            "namespace": "_semantic/preferences",
+            "content": "User prefers dark mode for all applications.",
+            "created": "2026-01-15T10:30:00Z",
+            "modified": "2026-01-20T14:22:00Z",
+            "tags": ["preference", "ui"],
+            "temporal": {
+              "validFrom": "2026-01-15T00:00:00Z",
+              "validUntil": null,
+              "recordedAt": "2026-01-15T10:30:00Z"
+            },
+            "provenance": {
+              "sourceType": "user_explicit",
+              "confidence": 0.95,
+              "trustLevel": "user_stated",
+              "prov:wasDerivedFrom": {
+                "@id": "urn:mif:conversation:conv-456"
+              },
+              "prov:wasAttributedTo": {
+                "@id": "urn:mif:entity:person:jane-doe"
+              },
+              "prov:wasGeneratedBy": {
+                "@type": "prov:Activity",
+                "prov:wasAssociatedWith": {
+                  "@id": "urn:mif:agent:claude-3-opus",
+                  "@type": "prov:SoftwareAgent"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

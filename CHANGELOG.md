@@ -9,6 +9,37 @@ The format follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html):
 - **patch** — clarifications to spec text, schema bug fixes that don't change
   the wire shape
 
+## [0.2.0] — 2026-05-06
+
+### Added
+- `schema/mpf-v0.2.json` with MPF v0.2 envelopes.
+- Record-level `provenance` for `kind: "memory"` records, modeled on W3C
+  PROV-DM `wasAttributedTo`, `wasGeneratedBy`, `wasInfluencedBy`, and
+  `generatedAtTime`.
+- Optional bi-temporal record fields: `valid_time_start`, `valid_time_end`,
+  and `transaction_time`.
+- Optional `deletion_log` sidecar plus v0.2 fields for parent-hash and
+  compression distillation lineage.
+- New conformance vectors for PROV chains, bi-temporal records, and read-only
+  MIF adapter output.
+- Offline migration guides and scripts for Mem0, Zep, Letta, Subcog,
+  Basic Memory, MemPalace, Graphiti, Cognee, and MIF.
+
+### Documented
+- MPF's independent v0.2 framing as MNEMOS's memory portability format,
+  informed by W3C PROV and MIF lessons without aligning the MPF data model to
+  MIF.
+- Differentiators MPF has that MIF does not: DAG version chains, deletion-log
+  audit trails, compression-manifest provenance, and federation attribution.
+- `python3 validate.py vectors/` as the full conformance gate.
+
+### Compatibility
+- `schema/mpf-v0.1.json` remains in place.
+- `validate.py` auto-selects the matching schema for v0.1 and v0.2 envelopes.
+- Existing v0.1 vectors continue to validate unchanged.
+- v0.2 bi-temporal fields are optional; existing MNEMOS memories default valid
+  time to transaction time on import.
+
 ## [0.1.1] — 2026-04-26
 
 Initial public spec release. Extracted from MNEMOS as the canonical home for

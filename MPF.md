@@ -2,10 +2,13 @@
 
 **Think of it as the CSV export, but for agent memory.**
 
+MPF is MNEMOS's memory portability format; standalone but informed by W3C
+PROV and the lessons of MIF.
+
 A schema-versioned JSON envelope for moving agent memory and parsed
 documents between systems — and for snapshotting them as portable
-backups. MNEMOS authored the v0.1 line as the reference implementation;
-the format itself is intentionally neutral. Any RAG memory system
+backups. MNEMOS remains the reference implementation, but the format
+evolves independently. Any RAG memory system
 (MemPalace, Mem0, Letta, Graphiti, Cognee, Zep) can produce or consume
 MPF, and document-ingest pipelines (docling, markitdown) can target it
 as an output format without changing their own schemas.
@@ -90,6 +93,31 @@ know about. This is deliberate forward/backward compatibility.
 
 ---
 
+## Relationship to MIF
+
+MIF is a useful reference for the broader memory-portability problem,
+especially around provenance and bi-temporal thinking. MPF does not
+align its data model to MIF, does not treat MIF as an upstream format,
+and does not require MPF producers to emit JSON-LD or Markdown
+frontmatter. The v0.2 MIF adapter is read-only and one-way: it imports
+MIF JSON-LD into MPF while preserving the original MIF object under
+`payload.metadata.mif_raw` for audit.
+
+### What MPF has that MIF does not
+
+| MPF differentiator | Description |
+|---|---|
+| DAG version chain | `memory_versions[]` carries a git-like memory history using `parent_hash`, `parent_version_id`, `branch`, and `commit_hash`/commit metadata. This is a first-class sidecar, not only an ontology relationship. |
+| Deletion-log audit trail | `deletion_log[]` records tombstones, delete actors, delete times, reasons, and optional tombstone hashes so deletion intent survives partial exports. |
+| Compression-manifest provenance | `compression_manifest[]` records selected distilled forms, `distillation_lineage`, judge model, judge confidence, quality score, compression ratio, and contest IDs. |
+| Federation source attribution | MPF preserves federation origin through provenance markers such as `fed:<peer>` in `wasAttributedTo.id`, `wasInfluencedBy[].uri`, relationship tags, and source payload metadata. |
+
+These are MPF-native features that MNEMOS relies on for portable backup,
+federation audit, and reversible memory operations. They remain MPF
+concepts even when an adapter imports from MIF.
+
+---
+
 ## Design principles
 
 1. **Schema-versioned at the envelope level.** Every file declares
@@ -116,7 +144,7 @@ know about. This is deliberate forward/backward compatibility.
    canonical for small exports. JSONL (one record per line) variant for
    corpora above ~100 MB.
 7. **Losslessly round-trippable within a version.** Export on
-   `mpf_version=0.1`, import on `mpf_version=0.1` → byte-identical
+   `mpf_version=0.2`, import on `mpf_version=0.2` → byte-identical
    payloads, preserved IDs, preserved timestamps, preserved relations.
 8. **Forward-compatible unknown-kind parsing.** Consumers MUST accept
    unknown `kind` values and skip those records rather than crashing.
@@ -129,7 +157,7 @@ know about. This is deliberate forward/backward compatibility.
 
 ```jsonc
 {
-  "mpf_version": "0.1.0",
+  "mpf_version": "0.2.0",
   "source_system": "mnemos",
   "source_version": "3.1.0",
   "source_instance": "pythia.internal",         // optional diagnostic
@@ -161,6 +189,18 @@ know about. This is deliberate forward/backward compatibility.
       "id": "mem_01JAB2",
       "kind": "memory",
       "payload_version": "mnemos-3.1",
+      "valid_time_start": "2026-01-15T10:30:00Z",
+      "valid_time_end": null,
+      "transaction_time": "2026-01-15T10:30:00Z",
+      "provenance": {
+        "wasAttributedTo": { "type": "user", "id": "user:alice" },
+        "wasGeneratedBy": { "type": "chat_session", "id": "sess-xyz" },
+        "wasInfluencedBy": [
+          { "type": "external_uri", "uri": "fed:peer-west/memories/mem_abc",
+            "relationship": "fed:peer-west" }
+        ],
+        "generatedAtTime": "2026-01-15T10:30:00Z"
+      },
       "payload": {
         "content": "Hermes gateway depends on MNEMOS API at :5002.",
         "category": "solutions",
@@ -252,11 +292,22 @@ know about. This is deliberate forward/backward compatibility.
       "record_id": "mem_01JAB2",
       "version_num": 1,
       "commit_hash": "3d4e2f...",
+      "parent_hash": null,
       "branch": "main",
       "parent_version_id": null,
       "content": "<prior content>",
       "snapshot_at": "2026-01-15T10:30:00Z",
       "change_type": "create"
+    }
+  ],
+
+  "deletion_log": [
+    {
+      "id": "del_001",
+      "record_id": "mem_old",
+      "deleted_at": "2026-04-23T14:30:00Z",
+      "deleted_by": "user:alice",
+      "reason": "user-requested cleanup"
     }
   ],
 
@@ -267,7 +318,7 @@ know about. This is deliberate forward/backward compatibility.
     "sidecar_file": "embeddings.parquet"         // if encoding=sidecar
   },
 
-  "attestations": []                             // reserved for v0.2+
+  "attestations": []                             // optional signed-export surface
 }
 ```
 
@@ -281,17 +332,37 @@ know about. This is deliberate forward/backward compatibility.
 | `kind` | **required** | One of the registered kinds (see registry below), or a new value a producer coins. |
 | `payload_version` | **required** | Version of the payload schema. For `kind: document`, the DoclingDocument version. For `kind: memory`, the producing system's native version (e.g. `"mnemos-3.1"`). |
 | `payload` | **required** | Opaque to the envelope. The payload schema is owned by the payload_version. |
+| `provenance` | **required for `kind: "memory"` in v0.2** | PROV-DM-inspired section containing `wasAttributedTo`, `wasGeneratedBy`, optional `wasInfluencedBy`, and `generatedAtTime`. |
+| `valid_time_start` | optional | When the fact was true in the world. If absent, MNEMOS importers default valid time to transaction time. |
+| `valid_time_end` | optional | When the fact stopped being true in the world. `null` means open-ended/current. |
+| `transaction_time` | optional | When the system recorded the memory. Often aliases `payload.created`. |
 
 Consumers MUST NOT rewrite `id` or `payload` during round-trip. They
 MAY enrich `payload` on import if the payload_version supports additive
 extension (MNEMOS does).
 
+### Provenance fields (v0.2)
+
+MPF v0.2 uses compact JSON names derived from W3C PROV-DM. Every
+`kind: "memory"` record has:
+
+| Field | Required | Description |
+|---|---|---|
+| `provenance.wasAttributedTo` | required | Object with `type: "agent"`, `"user"`, or `"system"` and a stable `id`. |
+| `provenance.wasGeneratedBy` | required | Activity object with `type` such as `chat_session`, `etl_job`, `federation_pull`, `distillation`, or `activity`. |
+| `provenance.wasInfluencedBy` | optional | List of `{type: "memory", id: "<records[].id>"}` or `{type: "external_uri", uri: "<URI>"}` influences. |
+| `provenance.generatedAtTime` | required | ISO-8601 UTC transaction timestamp. |
+
+Federation producers SHOULD use `fed:<peer>` markers in actor IDs,
+influence URIs, or relationship labels so importers can retain source
+attribution without understanding a peer's internal schema.
+
 ---
 
-## Kind registry (v0.1)
+## Kind registry (v0.2)
 
 The MPF spec maintains a small curated list of record kinds in
-`docs/mpf_kinds.md`. v0.1 seeds it with four kinds. New kinds require a
+`docs/mpf_kinds.md`. v0.2 keeps the four v0.1 kinds. New kinds require a
 spec PR plus reference payload schema.
 
 | Kind | Payload schema source | Intended for |
@@ -321,6 +392,8 @@ to make governance easier when they're promoted to the registry.
 | `records[].kind` | **required** | (parse error if absent) |
 | `records[].payload_version` | **required** | (parse error if absent) |
 | `records[].payload` | **required** | (parse error if absent) |
+| `records[].provenance` | **required for `kind: "memory"` in v0.2** | (parse error for v0.2 memory records if absent) |
+| `records[].valid_time_start` / `valid_time_end` / `transaction_time` | optional in v0.2 | valid time defaults to transaction time; transaction time defaults to payload creation time when importers can infer it |
 | `source_system` / `source_version` / `source_instance` / `source_commit` | optional | (diagnostic only) |
 | `record_count` | optional | (computed from `records.length` if absent) |
 | `kg_triples` | optional | `[]` |
@@ -328,8 +401,9 @@ to make governance easier when they're promoted to the registry.
 | `compression_manifest` | optional | `[]` — regenerate on import via contest |
 | `compression_candidates` | optional | `[]` — audit history lost |
 | `memory_versions` | optional | `[]` — DAG history lost |
+| `deletion_log` | optional in v0.2 | `[]` — tombstone audit trail lost |
 | `embeddings` | optional | regenerated on import |
-| `attestations` | optional | `[]` (reserved for v0.2+ signed exports) |
+| `attestations` | optional | `[]` |
 
 ---
 
@@ -338,6 +412,7 @@ to make governance easier when they're promoted to the registry.
 | MPF version | Envelope additions | Kind registry additions |
 |---|---|---|
 | `0.1` | Initial envelope, `records[]` + discriminator, sidecars, `relations[]` | `document`, `memory`, `fact`, `event` |
+| `0.2` | `provenance`, optional bi-temporal record fields, `deletion_log`, parent-hash and compression lineage fields, migration vectors | no new kinds |
 
 Future bumps are reserved for breaking changes to the envelope. Kind
 registry additions do NOT bump MPF version — they're forward-compatible
@@ -383,12 +458,17 @@ schema migration.
 
 ## Interop
 
+Offline best-effort migration guides and runnable scripts live under
+`migrations/` for Mem0, Zep, Letta, Subcog, Basic Memory, MemPalace,
+Graphiti, Cognee, and MIF. They require source files only, not live
+service instances.
+
 ### MNEMOS (producer + consumer, reference implementation)
 
-Canonical producer. `POST /v1/export` emits MPF v0.1 with MNEMOS
+Canonical producer. `POST /v1/export` emits MPF v0.2 with MNEMOS
 memories as `kind: memory` records. `POST /v1/import` accepts MPF v0.1
-and transforms payloads at the declared `payload_version` into the
-target schema. For the PYTHIA v2.3 → CERBERUS v3.1 migration, the
+and v0.2 and transforms payloads at the declared `payload_version` into
+the target schema. For the PYTHIA v2.3 → CERBERUS v3.1 migration, the
 importer applies the v2.4 → v3.1 upgrade rules above.
 
 ### docling
@@ -412,7 +492,7 @@ A MPF envelope built from a corpus of docling outputs is:
 
 ```python
 {
-  "mpf_version": "0.1.0",
+  "mpf_version": "0.2.0",
   "source_system": "docling",
   "source_version": docling.__version__,
   "exported_at": datetime.now(timezone.utc).isoformat(),
@@ -537,9 +617,10 @@ Mem0 uses OpenAI `text-embedding-3-small`; these aren't interchangeable).
 
 ## Validation
 
-A JSON Schema lives at `docs/mpf_v0.1.json` (tracked in the MNEMOS
-repo, pinned per envelope version). Producers SHOULD validate before
-emission. Consumers MUST validate the envelope before processing.
+JSON Schemas live under `schema/` and are pinned per envelope version:
+`schema/mpf-v0.1.json` for v0.1 and `schema/mpf-v0.2.json` for v0.2.
+Producers SHOULD validate before emission. Consumers MUST validate the
+envelope before processing.
 Payload-level validation is per-payload_version and delegated to the
 owning system's schema.
 
@@ -560,6 +641,12 @@ Roundtrip invariants that MUST hold:
    no fields are dropped. Importers that can't preserve a field MUST
    log it and emit a non-zero exit code.
 
+The repo conformance gate is:
+
+```bash
+python3 validate.py vectors/
+```
+
 ---
 
 ## Security and privacy
@@ -570,10 +657,9 @@ Roundtrip invariants that MUST hold:
   federation peers keep their `federation_source` attribution inside
   the memory payload, and importers MUST preserve it — this is audit
   provenance, not a user-editable field.
-- **Signed envelopes (v0.2+ optional).** The top-level `attestations[]`
-  array is reserved for detached Ed25519 signatures over the canonical
-  JSON form (hash-then-sign). Not required in v0.1; reserved in the
-  schema to avoid future breaking changes.
+- **Signed envelopes (optional).** The top-level `attestations[]` array
+  is reserved for detached Ed25519 signatures over the canonical JSON
+  form (hash-then-sign). Not required for v0.2 conformance.
 - **Embeddings may reveal content.** If embeddings are included,
   downstream consumers can partially reconstruct content via inversion
   attacks. Strip embeddings from exports shared outside trusted scope.
@@ -617,7 +703,7 @@ The pitch to the docling project:
 > unchanged inside a one-object MPF record (`{kind: "document",
 > payload_version: doc.version, payload: doc.model_dump()}`). No
 > changes to docling-core required. Spec is at
-> github.com/perlowja/mnemos/blob/master/docs/MEMORY_EXPORT_FORMAT.md.
+> github.com/mnemos-os/mpf/blob/master/MPF.md.
 
 This sits naturally alongside docling's existing RAG integrations
 (`docling-langchain`, `docling-haystack`, `docling-mcp`): MPF is the
@@ -629,6 +715,11 @@ the PR.
 
 ## Changelog
 
+- **2026-05-06** — MPF v0.2 adds PROV-DM-inspired memory
+  provenance, optional bi-temporal fields, deletion-log audit surface,
+  compression lineage, migration guides/scripts, and new conformance
+  vectors. MIF remains a read-only reference adapter, not an upstream
+  data model.
 - **2026-04-23** — Initial MPF v0.1 spec. Envelope uses `records[]`
   with `kind` discriminator after GRAEAE architectural consultation
   (4-muse consensus on Option 3 over parallel-arrays Option 1).
