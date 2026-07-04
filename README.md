@@ -1,3 +1,11 @@
+> # 📍 Moved to GitLab
+> **The canonical, authoritative home of this project is GitLab — always:**
+> ## 👉 https://gitlab.com/ncz-os/mpf
+>
+> This GitHub repository is a **frozen, read-only mirror**. All development, issues, and releases happen on GitLab. Please open issues and merge requests there. The full history of this stub is preserved on GitLab.
+
+---
+
 # MPF — Memory Portability Format
 
 [![spec: v0.2.0](https://img.shields.io/badge/spec-v0.2.0-blue.svg)](MPF.md)
