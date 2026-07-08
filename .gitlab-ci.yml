@@ -1,0 +1,9 @@
+stages: [check]
+ruff:
+  stage: check
+  image: python:3.12-slim
+  before_script: [pip install --quiet ruff]
+  script: [ruff check --select E9,F63,F7,F82 --output-format=concise .]
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "push"'
